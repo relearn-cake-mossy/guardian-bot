@@ -13,11 +13,11 @@ const {
   Routes,
   SlashCommandBuilder,
 } = require('discord.js');
-const config = require('./config');
-const { createModerationEngine } = require('./moderation');
-const { createAiModerator } = require('./groq');
-const { createWelcomeCard } = require('./welcome-card');
-const { createDatabase } = require('./database');
+const config = require('./src/config');
+const { createModerationEngine } = require('./src/moderation');
+const { createAiModerator } = require('./src/groq');
+const { createWelcomeCard } = require('./src/welcome-card');
+const { createDatabase } = require('./src/database');
 
 if (!config.discordToken) {
   console.error('Thiếu DISCORD_TOKEN. Hãy tạo file .env theo .env.example.');
