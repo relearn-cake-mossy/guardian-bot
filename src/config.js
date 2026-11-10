@@ -31,9 +31,14 @@ module.exports = {
   massMentionLimit: positiveNumber('MASS_MENTION_LIMIT', 5),
   blockedWords: csv('BLOCKED_WORDS'),
   blockedDomains: csv('BLOCKED_DOMAINS'),
+  aiApiKeys: (process.env.AI_API_KEYS || process.env.AI_API_KEY || process.env.GROQ_API_KEY || '')
+    .split(',')
+    .map((key) => key.trim())
+    .filter(Boolean),
   aiApiKey: process.env.AI_API_KEY || process.env.GROQ_API_KEY,
-  aiModel: process.env.AI_MODEL || process.env.GROQ_MODEL || 'llama-3.1-8b-instant',
+  aiModel: process.env.AI_MODEL || process.env.GROQ_MODEL || 'qwen3.8-27b',
   aiVisionModel: process.env.AI_VISION_MODEL || 'meta-llama/llama-4-scout-17b-16e-instruct',
+  aiRequestIntervalMs: positiveNumber('AI_REQUEST_INTERVAL_SECONDS', 60) * 1000,
   aiMaxCallsPerHour: positiveNumber('AI_MAX_CALLS_PER_HOUR', positiveNumber('GROQ_MAX_CALLS_PER_HOUR', 60)),
   aiUserCooldownMs: positiveNumber('AI_USER_COOLDOWN_SECONDS', positiveNumber('GROQ_USER_COOLDOWN_SECONDS', 30)) * 1000,
   aiMinConfidence: Math.min(1, positiveNumber('AI_MIN_CONFIDENCE', positiveNumber('GROQ_MIN_CONFIDENCE', 0.9))),

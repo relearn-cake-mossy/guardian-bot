@@ -6,7 +6,7 @@ Bot cộng đồng Node.js dùng chung: chủ bot host một instance và các s
 
 1. Dùng Node.js 20 trở lên, chạy `npm install`.
 2. Tạo ứng dụng trong [Discord Developer Portal](https://discord.com/developers/applications). Bật **Server Members Intent** và **Message Content Intent**.
-3. Cấu hình biến môi trường theo `.env.example`, tối thiểu `DISCORD_TOKEN`. Cấu hình `AI_API_KEY` nếu muốn bật kiểm duyệt AI; không có khóa, bộ lọc cục bộ vẫn chạy.
+3. Cấu hình biến môi trường theo `.env.example`, tối thiểu `DISCORD_TOKEN`. Cấu hình `AI_API_KEYS` bằng danh sách khóa phân tách bởi dấu phẩy để tự chuyển khóa khi request lỗi; `AI_API_KEY` cũ vẫn hỗ trợ một khóa. Không có khóa, bộ lọc cục bộ vẫn chạy.
 4. Chạy `npm start`. Khi khởi động, bot tự đăng ký lệnh slash `/setup`.
 5. SQLite mặc định nằm tại `data/guardian.sqlite`. Trên hosting, gắn persistent disk/volume và đặt `DATABASE_PATH` trỏ vào đó; nếu ổ đĩa không lưu bền qua deploy/restart, cấu hình server sẽ mất.
 
@@ -21,7 +21,7 @@ Mỗi tin nhắn từ người dùng làm mới mốc hoạt động. Cấu hìn
 - `WELCOME_TEXT` / `GOODBYE_TEXT` nhận `{user}`, `{server}`, `{memberCount}`. `WELCOME_BACKGROUND_PATH` trỏ đến ảnh nền PNG/JPG/WebP; nếu thiếu, bot tạo nền chuyển sắc và chèn avatar tự động.
 - `BLOCKED_WORDS` / `BLOCKED_DOMAINS` là danh sách phân tách bằng dấu phẩy.
 - Luật cục bộ xóa tin nhắn vi phạm và kick thành viên; AI cũng chỉ xóa/kick khi kết luận vi phạm đủ ngưỡng tin cậy. Bot không ban và không gửi cảnh cáo vào kênh. Cần quyền Kick Members, Manage Messages và vai trò bot cao hơn thành viên vi phạm.
-- AI lấy mẫu ngẫu nhiên theo `AI_SAMPLE_RATE` (mặc định 20%), gom tối đa `AI_BATCH_SIZE` tin vào một request sau `AI_BATCH_INTERVAL_MS`. Mỗi tin tối đa 400 ký tự; ảnh đính kèm và ảnh embed cũng được lấy mẫu. Đặt `AI_VISION_MODEL` thành model có khả năng đọc ảnh. `AI_MAX_CALLS_PER_HOUR`, `AI_USER_COOLDOWN_SECONDS` và `AI_MAX_PENDING` giới hạn mức sử dụng; khi thiếu khóa hoặc dịch vụ AI lỗi, luật cục bộ vẫn chạy và lỗi AI không được ghi log.
+- AI mặc định dùng `qwen3.8-27b`, lấy mẫu theo `AI_SAMPLE_RATE` (mặc định 20%), gom tối đa `AI_BATCH_SIZE` tin vào mỗi request và giới hạn toàn cục một request mỗi `AI_REQUEST_INTERVAL_SECONDS` (mặc định 60 giây). Mỗi tin tối đa 400 ký tự; ảnh dùng model đọc ảnh riêng trong `AI_VISION_MODEL`. `AI_MAX_CALLS_PER_HOUR`, `AI_USER_COOLDOWN_SECONDS` và `AI_MAX_PENDING` cũng giới hạn mức sử dụng; khi thiếu khóa hoặc dịch vụ AI lỗi, luật cục bộ vẫn chạy và lỗi AI không được ghi log.
 
 ## Điều khoản và quyền riêng tư
 
